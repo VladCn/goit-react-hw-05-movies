@@ -12,8 +12,6 @@ export const Layout = () => {
       <main className="container">
         <Outlet />
       </main>
-
-      <footer>2022</footer>
     </div>
   );
 };

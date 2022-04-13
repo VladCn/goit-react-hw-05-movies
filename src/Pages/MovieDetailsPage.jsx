@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { default as axios } from 'axios';
 
@@ -9,6 +9,9 @@ export const MovieDetailsPage = () => {
   const [filmData, setFilmData] = useState([]);
   const [releaseData, setReleaseData] = useState([]);
   console.log(params.movieId);
+
+  const navigate = useNavigate();
+  const goBack = () => navigate(-1);
 
   useEffect(() => {
     axios
@@ -27,10 +30,16 @@ export const MovieDetailsPage = () => {
       });
   }, []);
 
+  const reit = () => {
+    if (filmData.vote_average) {
+      return filmData.vote_average * 10;
+    }
+  };
+
   return (
     <div>
       <p>MovieDetailsPage</p>
-      <button>Go back</button>
+      <button onClick={goBack}>Go back</button>
       <div className="container">
         <img
           width="150px"
@@ -38,14 +47,35 @@ export const MovieDetailsPage = () => {
           src={`${IMG_URL}${filmData.poster_path}`}
         />
         <ul>
-          <li>{`${filmData.original_title} (${releaseData})`}</li>
+          <li>
+            <h1>{`${filmData.original_title} (${releaseData})`}</h1>
+          </li>
+          <li>{`User Score: ${reit()}%`}</li>
+          <li>
+            <h2>Overview</h2>
+            <p>{filmData.overview}</p>
+          </li>
+          <li>
+            <h2>Genres</h2>
+            {filmData?.genres?.map(genre => (
+              <ul key={genre.id}>
+                <li>{genre.name}</li>
+              </ul>
+            ))}
+          </li>
         </ul>
       </div>
+      <h3>Additional information</h3>
 
-      <Link to={`/movies/${params.movieId}/cast`}>Casts</Link>
-      <Link to={`/movies/${params.movieId}/reviews`}>Reviews</Link>
+      <ul>
+        <li>
+          <Link to={`/movies/${params.movieId}/cast`}>Casts</Link>
+        </li>
+        <li>
+          <Link to={`/movies/${params.movieId}/reviews`}>Reviews</Link>
+        </li>
+      </ul>
+      <Outlet />
     </div>
   );
 };
-
-// `${IMG_URL}${filmData.poster_path}`

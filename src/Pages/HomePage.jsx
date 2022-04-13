@@ -24,7 +24,7 @@ export const HomePage = () => {
 
   return (
     <div>
-      <p>HomePage</p>
+      <h1>Trending today</h1>
       {filmsList?.data?.results?.map(films => (
         <li key={films.id}>
           <Link to={`/movies/${films.id}`}>{films.title || films.name}</Link>
