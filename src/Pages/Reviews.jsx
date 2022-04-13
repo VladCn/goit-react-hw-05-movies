@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, Outlet, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { default as axios } from 'axios';
 
 const API = '70fc5b973179caa818ae6622551a44d1';
-const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 
-export const Reviews = () => {
+const Reviews = () => {
   const paramsRew = useParams();
 
   const [rewList, setRewList] = useState('');
@@ -25,17 +24,22 @@ export const Reviews = () => {
         console.log(error);
       });
   }, [paramsRew.movieId]);
-  console.log(rewList);
+  console.log(rewList?.results);
   return (
     <div>
       <ul>
-        {rewList?.results?.map(rew => (
-          <li key={rew.id}>
-            <h3>Author: {rew.author}</h3>
-            <p>{rew.content}</p>
-          </li>
-        ))}
+        {rewList?.results?.length ? (
+          rewList.results?.map(rew => (
+            <li key={rew.id}>
+              <h3>Author: {rew.author}</h3>
+              <p>{rew.content}</p>
+            </li>
+          ))
+        ) : (
+          <p>We don`t have reviews for this movie</p>
+        )}
       </ul>
     </div>
   );
 };
+export default Reviews;

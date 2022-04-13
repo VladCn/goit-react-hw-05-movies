@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { default as axios } from 'axios';
 import { Link, useSearchParams } from 'react-router-dom';
 
-export const MoviesPage = () => {
+const MoviesPage = () => {
   const [searchFilms, setSearchFilms] = useState('');
   const [films, setFilms] = useState([]);
   const API = '70fc5b973179caa818ae6622551a44d1';
@@ -57,3 +57,4 @@ export const MoviesPage = () => {
     </div>
   );
 };
+export default MoviesPage;

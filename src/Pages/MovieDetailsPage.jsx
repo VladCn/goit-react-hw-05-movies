@@ -1,8 +1,29 @@
 import { Link, useParams, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { default as axios } from 'axios';
+import styled from 'styled-components';
 
-export const MovieDetailsPage = () => {
+const DivCont = styled.div`
+  display: flex;
+  border-bottom: 1px solid black;
+`;
+const Container = styled.ul`
+  list-style-type: none;
+`;
+const Genres = styled.ul`
+  display: flex;
+  list-style-type: none;
+  padding-inline-start: 0;
+`;
+const Genre = styled.li`
+  margin-right: 5px;
+`;
+const Info = styled.ul`
+  border-bottom: 1px solid black;
+  padding-bottom: 15px;
+`;
+
+const MovieDetailsPage = () => {
   const API = '70fc5b973179caa818ae6622551a44d1';
   const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
   const params = useParams();
@@ -28,7 +49,7 @@ export const MovieDetailsPage = () => {
         // handle error
         console.log(error);
       });
-  }, []);
+  }, [params.movieId]);
 
   const reit = () => {
     if (filmData.vote_average) {
@@ -38,15 +59,14 @@ export const MovieDetailsPage = () => {
 
   return (
     <div>
-      <p>MovieDetailsPage</p>
       <button onClick={goBack}>Go back</button>
-      <div className="container">
+      <DivCont>
         <img
-          width="150px"
-          height="200px"
+          width="200px"
+          height="300px"
           src={`${IMG_URL}${filmData.poster_path}`}
         />
-        <ul>
+        <Container>
           <li>
             <h1>{`${filmData.original_title} (${releaseData})`}</h1>
           </li>
@@ -57,25 +77,26 @@ export const MovieDetailsPage = () => {
           </li>
           <li>
             <h2>Genres</h2>
-            {filmData?.genres?.map(genre => (
-              <ul key={genre.id}>
-                <li>{genre.name}</li>
-              </ul>
-            ))}
+            <Genres>
+              {filmData?.genres?.map(genre => (
+                <Genre key={genre.id}>{genre.name}</Genre>
+              ))}
+            </Genres>
           </li>
-        </ul>
-      </div>
+        </Container>
+      </DivCont>
       <h3>Additional information</h3>
 
-      <ul>
+      <Info>
         <li>
           <Link to={`/movies/${params.movieId}/cast`}>Casts</Link>
         </li>
         <li>
           <Link to={`/movies/${params.movieId}/reviews`}>Reviews</Link>
         </li>
-      </ul>
+      </Info>
       <Outlet />
     </div>
   );
 };
+export default MovieDetailsPage;

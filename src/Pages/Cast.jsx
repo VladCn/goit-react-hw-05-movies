@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, Outlet, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { ReactComponent as Icon } from '../no_image_available.svg';
 import { default as axios } from 'axios';
+import styled from 'styled-components';
+
+const Character = styled.li`
+  list-style-type: none;
+  margin-bottom: 10px;
+`;
+const Pic = styled.img`
+  margin-bottom: 10px;
+`;
+const Actor = styled.li`
+  margin-bottom: 10px;
+`;
 
 const API = '70fc5b973179caa818ae6622551a44d1';
 const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 
-export const Cast = () => {
+const Cast = () => {
   const paramsCast = useParams();
 
   const [castList, setCastList] = useState('');
@@ -28,20 +41,31 @@ export const Cast = () => {
   console.log(castList);
   return (
     <div>
-      <p>Cast</p>
       <ul>
-        {castList?.cast?.map(actor => (
-          <ul key={actor.id}>
-            <img
-              width="65px"
-              height="90px"
-              src={`${IMG_URL}${actor.profile_path}`}
-            />
-            <li>{actor.name}</li>
-            <li>Character: {actor.character}</li>
-          </ul>
-        ))}
+        {castList?.cast?.map(actor => {
+          console.log(actor.profile_path);
+          return (
+            <ul key={actor.id}>
+              {actor.profile_path ? (
+                <Pic
+                  width="65px"
+                  height="90px"
+                  src={`${IMG_URL}${actor.profile_path}`}
+                />
+              ) : (
+                <Icon
+                  width="65px"
+                  height="90px"
+                  src="../no_image_available.svg"
+                />
+              )}
+              <Actor>{actor.name}</Actor>
+              <Character>Character: {actor.character}</Character>
+            </ul>
+          );
+        })}
       </ul>
     </div>
   );
 };
+export default Cast;

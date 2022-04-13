@@ -1,8 +1,16 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { default as axios } from 'axios';
+import styled from 'styled-components';
 
-export const HomePage = () => {
+const Ul = styled.ul`
+  margin-left: 5px;
+`;
+const Li = styled.li`
+  font-size: 14px;
+`;
+
+const HomePage = () => {
   const [filmsList, setFilmsList] = useState([]);
   const API = '70fc5b973179caa818ae6622551a44d1';
 
@@ -26,10 +34,13 @@ export const HomePage = () => {
     <div>
       <h1>Trending today</h1>
       {filmsList?.data?.results?.map(films => (
-        <li key={films.id}>
-          <Link to={`/movies/${films.id}`}>{films.title || films.name}</Link>
-        </li>
+        <Ul key={films.id}>
+          <Li>
+            <Link to={`/movies/${films.id}`}>{films.title || films.name}</Link>
+          </Li>
+        </Ul>
       ))}
     </div>
   );
 };
+export default HomePage;
