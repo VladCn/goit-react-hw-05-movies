@@ -65,6 +65,7 @@ const MovieDetailsPage = () => {
           width="200px"
           height="300px"
           src={`${IMG_URL}${filmData.poster_path}`}
+          alt={'no img'}
         />
         <Container>
           <li>
