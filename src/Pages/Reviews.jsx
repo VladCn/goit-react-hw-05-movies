@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { default as axios } from 'axios';
+
+import { getRew } from '../services';
 
 const API = '70fc5b973179caa818ae6622551a44d1';
 
 const Reviews = () => {
   const paramsRew = useParams();
+  const paramsRewId = paramsRew.movieId;
 
   const [rewList, setRewList] = useState('');
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${paramsRew.movieId}/reviews?api_key=${API}&language=en-US&page=1`
-      )
+    getRew(paramsRewId, API)
       .then(function (response) {
         // handle success
         setRewList(response.data);
@@ -23,7 +22,7 @@ const Reviews = () => {
         // handle error
         console.log(error);
       });
-  }, [paramsRew.movieId]);
+  }, [paramsRewId]);
   console.log(rewList?.results);
   return (
     <div>

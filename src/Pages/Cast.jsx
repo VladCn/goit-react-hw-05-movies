@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ReactComponent as Icon } from '../no_image_available.svg';
-import { default as axios } from 'axios';
 import styled from 'styled-components';
+import { getCast } from '../services';
 
 const Character = styled.li`
   list-style-type: none;
@@ -20,13 +20,11 @@ const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 
 const Cast = () => {
   const paramsCast = useParams();
+  const paramsCastId = paramsCast.movieId;
 
   const [castList, setCastList] = useState('');
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${paramsCast.movieId}/credits?api_key=${API}&language=en-US&page=1`
-      )
+    getCast(paramsCastId, API)
       .then(function (response) {
         // handle success
         setCastList(response.data);
@@ -37,7 +35,7 @@ const Cast = () => {
         // handle error
         console.log(error);
       });
-  }, [paramsCast.movieId]);
+  }, [paramsCastId]);
   console.log(castList);
   return (
     <div>

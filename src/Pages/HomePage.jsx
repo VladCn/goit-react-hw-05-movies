@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { default as axios } from 'axios';
 import styled from 'styled-components';
+import { getDayFilms } from '../services';
 
 const Ul = styled.ul`
   margin-left: 5px;
@@ -15,10 +15,7 @@ const HomePage = () => {
   const API = '70fc5b973179caa818ae6622551a44d1';
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/trending/all/day?api_key=${API}&language=en-US&page=1`
-      )
+    getDayFilms(API)
       .then(function (response) {
         // handle success
         setFilmsList(response);

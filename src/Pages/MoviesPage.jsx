@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { default as axios } from 'axios';
 import { Link, useSearchParams } from 'react-router-dom';
+import { getSearchFilms } from '../services';
 
 const MoviesPage = () => {
   const [searchFilms, setSearchFilms] = useState('');
@@ -11,7 +11,7 @@ const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSetFilms = e => {
-    setSearchFilms(e.target.value);
+    setSearchFilms(e.target.value.trim());
   };
 
   const handleSearchFilm = e => {
@@ -21,13 +21,13 @@ const MoviesPage = () => {
     }
   };
 
+  const isEmptyStateRender =
+    films?.data?.results && films?.data?.results?.length === 0 && searchFilms;
+
   useEffect(() => {
     let query = searchParams.get('query');
     if (query) {
-      axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=${API}&query=${query}&language=en-US&page=1&include_adult=false`
-        )
+      getSearchFilms(API, query)
         .then(function (response) {
           // handle success
           setFilms(response);
@@ -48,11 +48,15 @@ const MoviesPage = () => {
         <button>search</button>
       </form>
       <ul>
-        {films?.data?.results?.map(films => (
-          <li key={films.id}>
-            <Link to={`/movies/${films.id}`}>{films.title || films.name}</Link>
-          </li>
-        ))}
+        {films?.data?.results?.length !== 0 &&
+          films.data?.results?.map(films => (
+            <li key={films.id}>
+              <Link to={`/movies/${films.id}`}>
+                {films.title || films.name}
+              </Link>
+            </li>
+          ))}
+        {isEmptyStateRender && <div>Ошибка 404</div>}
       </ul>
     </div>
   );

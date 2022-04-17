@@ -1,7 +1,7 @@
 import { Link, useParams, Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { default as axios } from 'axios';
 import styled from 'styled-components';
+import { getMovieDetails } from '../services';
 
 const DivCont = styled.div`
   display: flex;
@@ -29,16 +29,13 @@ const MovieDetailsPage = () => {
   const params = useParams();
   const [filmData, setFilmData] = useState([]);
   const [releaseData, setReleaseData] = useState([]);
-  console.log(params.movieId);
+  const paramsId = params.movieId;
 
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${params.movieId}?api_key=${API}&language=en-US&page=1`
-      )
+    getMovieDetails(paramsId, API)
       .then(function (response) {
         // handle success
         setFilmData(response.data);
@@ -49,7 +46,7 @@ const MovieDetailsPage = () => {
         // handle error
         console.log(error);
       });
-  }, [params.movieId]);
+  }, [paramsId]);
 
   const reit = () => {
     if (filmData.vote_average) {
