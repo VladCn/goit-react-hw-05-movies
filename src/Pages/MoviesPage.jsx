@@ -1,12 +1,14 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { getSearchFilms } from '../services';
 
 const MoviesPage = () => {
   const [searchFilms, setSearchFilms] = useState('');
   const [films, setFilms] = useState([]);
   const API = '70fc5b973179caa818ae6622551a44d1';
+  const navigate = useNavigate();
+  const goHome = () => navigate('/', { replace: true });
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -21,10 +23,15 @@ const MoviesPage = () => {
     }
   };
 
-  const isEmptyStateRender =
-    films?.data?.results && films?.data?.results?.length === 0 && searchFilms;
-
   useEffect(() => {
+    if (
+      films?.data?.results &&
+      films?.data?.results?.length !== 0 &&
+      searchFilms
+    ) {
+      goHome();
+    }
+
     let query = searchParams.get('query');
     if (query) {
       getSearchFilms(API, query)
@@ -56,7 +63,6 @@ const MoviesPage = () => {
               </Link>
             </li>
           ))}
-        {isEmptyStateRender && <div>Ошибка 404</div>}
       </ul>
     </div>
   );
