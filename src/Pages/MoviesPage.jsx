@@ -8,7 +8,6 @@ const MoviesPage = () => {
   const [films, setFilms] = useState([]);
   const API = '70fc5b973179caa818ae6622551a44d1';
   const navigate = useNavigate();
-  const goHome = () => navigate('/', { replace: true });
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -24,14 +23,6 @@ const MoviesPage = () => {
   };
 
   useEffect(() => {
-    if (
-      films?.data?.results &&
-      films?.data?.results?.length !== 0 &&
-      searchFilms
-    ) {
-      goHome();
-    }
-
     let query = searchParams.get('query');
     if (query) {
       getSearchFilms(API, query)
@@ -46,6 +37,12 @@ const MoviesPage = () => {
         });
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (films?.data?.results && !films?.data?.results?.length && searchFilms) {
+      navigate('/', { replace: true });
+    }
+  }, [films?.data?.results, navigate, searchFilms]);
 
   return (
     <div>
