@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 const Layout = lazy(() => import('../Pages/Layout'));
 const HomePage = lazy(() => import('../Pages/HomePage'));
@@ -19,6 +19,7 @@ export const App = () => {
             <Route path="reviews" element={<Reviews />} />
           </Route>
         </Route>
+        <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
     </Suspense>
   );
